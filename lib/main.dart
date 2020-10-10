@@ -29,6 +29,7 @@ class _RandomWordsState extends State<RandomWords> {
   final _biggerFont = const TextStyle(fontSize: 18);
   final _saved = Set<WordPair>();
   double _hemuli = 0;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -123,9 +124,10 @@ class _RandomWordsState extends State<RandomWords> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return Scaffold(
+                key: _scaffoldKey,
                 backgroundColor: Colors.white,
                 appBar: AppBar(
-                  title: Text('Hemuli'),
+                  title: Text('Hemuli ' + _hemuli.toInt().toString()),
                   backgroundColor: getRandomColor(),
                 ),
                 body: _buildSlider(setState));
@@ -137,12 +139,30 @@ class _RandomWordsState extends State<RandomWords> {
 
   Widget _buildSlider(StateSetter _setState) {
     return Slider(
+      divisions: 10,
+      label: _hemuli.toString(),
       value: _hemuli,
       onChanged: (newValue) => _setState(() {
         _hemuli = newValue;
       }),
+      onChangeEnd: (newValue) => _setState(() {
+        _showHemuliSnackBar(newValue);
+      }),
       min: 0.0,
       max: 20.0,
+    );
+  }
+
+  void _showHemuliSnackBar(double _value) {
+    print(_value);
+    _scaffoldKey.currentState.showSnackBar(_createHemuliSnackBar(_value));
+  }
+
+  _createHemuliSnackBar(double _value) {
+    return SnackBar(
+      backgroundColor: Colors.cyan,
+      duration: new Duration(milliseconds: 10),
+      content: Text('Hemuli changed! ' + _value.toInt().toString()),
     );
   }
 }
