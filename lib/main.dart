@@ -28,7 +28,7 @@ class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
   final _biggerFont = const TextStyle(fontSize: 18);
   final _saved = Set<WordPair>();
-  double hemuli = 12;
+  double _hemuli = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _RandomWordsState extends State<RandomWords> {
         title: Text('Startup Name Generator'),
         actions: [
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
-          IconButton(icon: Icon(Icons.settings), onPressed: _doStuff),
+          IconButton(icon: Icon(Icons.settings), onPressed: _showHemuliSlider),
         ],
       ),
       body: _buildSuggestions(),
@@ -116,32 +116,33 @@ class _RandomWordsState extends State<RandomWords> {
     );
   }
 
-  void _doStuff() {
+  void _showHemuliSlider() {
     Navigator.of(context).push(
-      MaterialPageRoute<double>(
+      MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          return Scaffold(
-            backgroundColor: wtf.getRandomColor(),
-            appBar: AppBar(
-              title: Text('Hemuli ' + hemuli.toInt().toString()),
-              backgroundColor: getRandomColor(),
-            ),
-            body: Slider(
-              value: hemuli,
-              onChanged: setHemuli,
-              min: 1.0,
-              max: 20.0,
-            ),
-          );
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  title: Text('Hemuli'),
+                  backgroundColor: getRandomColor(),
+                ),
+                body: _buildSlider(setState));
+          });
         },
       ),
     );
   }
 
-  void setHemuli(double value) {
-    print(value);
-    setState(() {
-      hemuli = value;
-    });
+  Widget _buildSlider(StateSetter _setState) {
+    return Slider(
+      value: _hemuli,
+      onChanged: (newValue) => _setState(() {
+        _hemuli = newValue;
+      }),
+      min: 0.0,
+      max: 20.0,
+    );
   }
 }
