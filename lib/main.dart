@@ -1,17 +1,20 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'src/color_changer.dart';
+import 'src/color_wtf.dart' as wtf;
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final wordPair = WordPair.random();
     return MaterialApp(
       title: 'Welcome to Flutter',
-      home: Scaffold(
-        body: Center(child: RandomWords()),
+      theme: ThemeData(
+        primaryColor: wtf.getRandomColor(),
+        canvasColor: Colors.white,
       ),
+      home: RandomWords(),
     );
   }
 }
@@ -92,14 +95,17 @@ class _RandomWordsState extends State<RandomWords> {
               );
             },
           );
+
           final divided = ListTile.divideTiles(
             context: context,
             tiles: tiles,
           ).toList();
 
           return Scaffold(
+            backgroundColor: getRandomColor(),
             appBar: AppBar(
               title: Text('Saved Suggestions'),
+              backgroundColor: getRandomColor(),
             ),
             body: ListView(children: divided),
           );
