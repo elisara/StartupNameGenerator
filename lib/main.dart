@@ -28,6 +28,7 @@ class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
   final _biggerFont = const TextStyle(fontSize: 18);
   final _saved = Set<WordPair>();
+  double hemuli = 12;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,7 @@ class _RandomWordsState extends State<RandomWords> {
         title: Text('Startup Name Generator'),
         actions: [
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
+          IconButton(icon: Icon(Icons.settings), onPressed: _doStuff),
         ],
       ),
       body: _buildSuggestions(),
@@ -112,5 +114,34 @@ class _RandomWordsState extends State<RandomWords> {
         },
       ),
     );
+  }
+
+  void _doStuff() {
+    Navigator.of(context).push(
+      MaterialPageRoute<double>(
+        builder: (BuildContext context) {
+          return Scaffold(
+            backgroundColor: wtf.getRandomColor(),
+            appBar: AppBar(
+              title: Text('Hemuli ' + hemuli.toInt().toString()),
+              backgroundColor: getRandomColor(),
+            ),
+            body: Slider(
+              value: hemuli,
+              onChanged: setHemuli,
+              min: 1.0,
+              max: 20.0,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void setHemuli(double value) {
+    print(value);
+    setState(() {
+      hemuli = value;
+    });
   }
 }
