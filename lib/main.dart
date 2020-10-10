@@ -130,7 +130,29 @@ class _RandomWordsState extends State<RandomWords> {
                   title: Text('Hemuli ' + _hemuli.toInt().toString()),
                   backgroundColor: getRandomColor(),
                 ),
-                body: _buildSlider(setState));
+                body: SingleChildScrollView(child: Builder(
+                  builder: (BuildContext context) {
+                    return Column(
+                      children: [
+                        Image.network(
+                            "https://vignette.wikia.nocookie.net/muumitalo/images/4/4a/Hemuli_juoksee_sarvikuonoa_pakoon.png/revision/latest?cb=20180422191047"),
+                        _buildSlider(setState),
+                        TextField(
+                          onSubmitted: (value) => _showHemuliSnackBar(value),
+                          decoration: InputDecoration(
+                              hintText: "Syötä oma Hemulinimi",
+                              contentPadding: EdgeInsets.all(16.0)),
+                        ),
+                        TextField(
+                          onSubmitted: (value) => _showHemuliSnackBar(value),
+                          decoration: InputDecoration(
+                              hintText: "Lisää hemuliunelma",
+                              contentPadding: EdgeInsets.all(16.0)),
+                        )
+                      ],
+                    );
+                  },
+                )));
           });
         },
       ),
@@ -146,23 +168,23 @@ class _RandomWordsState extends State<RandomWords> {
         _hemuli = newValue;
       }),
       onChangeEnd: (newValue) => _setState(() {
-        _showHemuliSnackBar(newValue);
+        _showHemuliSnackBar(newValue.toInt().toString());
       }),
       min: 0.0,
       max: 20.0,
     );
   }
 
-  void _showHemuliSnackBar(double _value) {
+  void _showHemuliSnackBar(String _value) {
     print(_value);
     _scaffoldKey.currentState.showSnackBar(_createHemuliSnackBar(_value));
   }
 
-  _createHemuliSnackBar(double _value) {
+  _createHemuliSnackBar(String _value) {
     return SnackBar(
       backgroundColor: Colors.cyan,
-      duration: new Duration(milliseconds: 10),
-      content: Text('Hemuli changed! ' + _value.toInt().toString()),
+      duration: new Duration(milliseconds: 100),
+      content: Text('Hemuli changed! ' + _value),
     );
   }
 }
