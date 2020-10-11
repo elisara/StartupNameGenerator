@@ -2,6 +2,7 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'src/color_changer.dart';
 import 'src/color_wtf.dart' as wtf;
+import 'hemuli_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,10 +39,23 @@ class _RandomWordsState extends State<RandomWords> {
         title: Text('Startup Name Generator'),
         actions: [
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
-          IconButton(icon: Icon(Icons.settings), onPressed: _showHemuliSlider),
+          IconButton(icon: Icon(Icons.settings), onPressed: _showHemuliPage),
         ],
       ),
       body: _buildSuggestions(),
+    );
+  }
+
+  void _showHemuliPage() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return new HemuliPage();
+          });
+        },
+      ),
     );
   }
 
@@ -114,77 +128,6 @@ class _RandomWordsState extends State<RandomWords> {
           );
         },
       ),
-    );
-  }
-
-  void _showHemuliSlider() {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            return Scaffold(
-                key: _scaffoldKey,
-                backgroundColor: Colors.white,
-                appBar: AppBar(
-                  title: Text('Hemuli ' + _hemuli.toInt().toString()),
-                  backgroundColor: getRandomColor(),
-                ),
-                body: SingleChildScrollView(child: Builder(
-                  builder: (BuildContext context) {
-                    return Column(
-                      children: [
-                        Image.network(
-                            "https://vignette.wikia.nocookie.net/muumitalo/images/4/4a/Hemuli_juoksee_sarvikuonoa_pakoon.png/revision/latest?cb=20180422191047"),
-                        _buildSlider(setState),
-                        TextField(
-                          onSubmitted: (value) => _showHemuliSnackBar(value),
-                          decoration: InputDecoration(
-                              hintText: "Syötä oma Hemulinimi",
-                              contentPadding: EdgeInsets.all(16.0)),
-                        ),
-                        TextField(
-                          onSubmitted: (value) => _showHemuliSnackBar(value),
-                          decoration: InputDecoration(
-                              hintText: "Lisää hemuliunelma",
-                              contentPadding: EdgeInsets.all(16.0)),
-                        )
-                      ],
-                    );
-                  },
-                )));
-          });
-        },
-      ),
-    );
-  }
-
-  Widget _buildSlider(StateSetter _setState) {
-    return Slider(
-      divisions: 10,
-      label: _hemuli.toString(),
-      value: _hemuli,
-      onChanged: (newValue) => _setState(() {
-        _hemuli = newValue;
-      }),
-      onChangeEnd: (newValue) => _setState(() {
-        _showHemuliSnackBar(newValue.toInt().toString());
-      }),
-      min: 0.0,
-      max: 20.0,
-    );
-  }
-
-  void _showHemuliSnackBar(String _value) {
-    print(_value);
-    _scaffoldKey.currentState.showSnackBar(_createHemuliSnackBar(_value));
-  }
-
-  _createHemuliSnackBar(String _value) {
-    return SnackBar(
-      backgroundColor: Colors.cyan,
-      duration: new Duration(milliseconds: 100),
-      content: Text('Hemuli changed! ' + _value),
     );
   }
 }
